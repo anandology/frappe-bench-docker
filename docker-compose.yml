@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  redis-cache:
+    image: redis:alpine
+  redis-queue:
+    image: redis:alpine
+  redis-socketio:
+    image: redis:alpine
+  mariadb:
+    image: mariadb
+    volumes:
+      - mariadb-storage:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  bench:
+    build: .
+    depends_on:
+      - redis-cache
+      - redis-queue
+      - redis-socketio
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    restart: on-failure
+volumes:
+  mariadb-storage: {}
