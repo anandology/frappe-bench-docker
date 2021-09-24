@@ -1,18 +1,24 @@
 #! /bin/bash
+#
+# Script to start bench from docker
+#
 set -e
 
 SITENAME=${FRAPPE_SITE_NAME:-frappe.localhost}
 
-if [ ! -d "sites/$SITENAME" ]
+if [ ! -f "sites/$SITENAME/site_config.json" ]
 then
     echo 'sleeping 15 seconds for mysql to start'
     sleep 15
+    chown -R bench:bench /opt/frappe-bench/sites/frappe.localhost
     echo creating new site $SITENAME
     bench new-site \
         --db-host mariadb \
         --mariadb-root-password root \
         --admin-password admin \
         --db-name frappe \
+        --db-password frappe \
+        --force \
         $SITENAME
 
     # add a new line as the apps.txt doesn't have an ending new line
@@ -32,4 +38,5 @@ then
     fi
 fi
 
+bench use frappe.localhost
 exec bench start

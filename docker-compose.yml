@@ -1,12 +1,6 @@
 version: "3"
 
 services:
-  redis-cache:
-    image: redis:alpine
-  redis-queue:
-    image: redis:alpine
-  redis-socketio:
-    image: redis:alpine
   mariadb:
     image: mariadb
     volumes:
@@ -17,13 +11,16 @@ services:
   bench:
     build: .
     depends_on:
-      - redis-cache
-      - redis-queue
-      - redis-socketio
       - mariadb
     ports:
       - "8000:8000"
       - "9000:9000"
     restart: on-failure
+    volumes:
+      - ./sites/frappe.localhost:/opt/frappe-bench/sites/frappe.localhost
+      # - ./community:/opt/frappe-bench/apps/community
+    environment:
+      # add space separated APPs to install. Make sure they are added as volumes
+      # - FRAPPE_APPS=community
 volumes:
   mariadb-storage: {}
