@@ -18,9 +18,9 @@ services:
     restart: on-failure
     volumes:
       - ./sites/frappe.localhost:/opt/frappe-bench/sites/frappe.localhost
-      # - ./community:/opt/frappe-bench/apps/community
-    environment:
-      # add space separated APPs to install. Make sure they are added as volumes
-      # - FRAPPE_APPS=community
+    #   - ./community:/opt/frappe-bench/apps/community
+    # environment:
+    #   # add space separated APPs to install. Make sure they are added as volumes
+    #   - FRAPPE_APPS=community
 volumes:
   mariadb-storage: {}
